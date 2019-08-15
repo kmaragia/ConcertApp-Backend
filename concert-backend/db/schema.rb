@@ -16,8 +16,13 @@ ActiveRecord::Schema.define(version: 2019_08_07_151000) do
   enable_extension "plpgsql"
 
   create_table "concerts", force: :cascade do |t|
+    t.string "artist_id"
     t.string "name"
     t.string "location"
+    t.string "img"
+    t.string "date"
+    t.string "time"
+    t.string "venue_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
