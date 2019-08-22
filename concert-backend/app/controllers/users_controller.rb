@@ -1,13 +1,15 @@
 class UsersController < ApplicationController
   def index
-    render json: User.all
+    render json: User.all.to_json(:include => {
+      :concerts => {:only => [:id,:artist_id,:name,:location,:img,:date,:time,:venue_address]}
+      })
   end
 
   # def show
   #   render json: find_params.to_json(
   #     except:[:created_at, :updated_at])
   # end
-  def show
+  def home
     token = request.headers["Authentication"].split(" ")[1]
     payload = decode(token)
     user = User.find(payload["user_id"])
@@ -18,11 +20,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def show
+    user = find_params
+    render json: user.to_json(:include => {
+      :concerts => {:only => [:id,:artist_id,:name,:location,:img,:date,:time,:venue_address]}
+      })
+  end
+
 
   def create
-    new_user = User.create(user_params)
-    render json: new_user.to_json
+    new_user = User.create!(user_params)
+    render json: new_user
   end
+
 
   def update
     find_params.update(user_params)
@@ -36,7 +46,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-     params.require(:user).permit(:name,:password,:Phone_number,:email)
+     params.require(:user).permit(:first_name,:last_name,:username,:password,:phone_number,:email)
   end
 
  def find_params

@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   resources :concerts
   resources :users
   post '/login', to:'auth#create'
-  get '/profile', to: 'users#show'
+  get '/profile', to: 'users#home'
 end
